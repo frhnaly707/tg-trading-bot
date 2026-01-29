@@ -64,7 +64,7 @@ def main() -> None:
     for router in all_routers:
         dp.include_router(router)
 
-    dp.startup.register(_on_startup)
+    dp.startup.register(lambda: _on_startup(dp))
     asyncio.run(dp.start_polling(bot))
 
 
