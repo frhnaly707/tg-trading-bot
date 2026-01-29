@@ -21,10 +21,8 @@ from app.services.marketdata import (
 from app.services.monitor import monitor_loop
 
 
-async def _on_startup(dp: Dispatcher) -> None:
-    settings = dp["settings"]
-    provider = dp["provider"]
-    asyncio.create_task(monitor_loop(dp.bot, provider, settings))
+async def _on_startup(bot: Bot, provider, settings) -> None:
+    asyncio.create_task(monitor_loop(bot, provider, settings))
     asyncio.create_task(auto_levels_loop(provider, settings))
 
 
@@ -64,7 +62,10 @@ def main() -> None:
     for router in all_routers:
         dp.include_router(router)
 
-    dp.startup.register(lambda: _on_startup(dp))
+    async def startup_handler() -> None:
+        await _on_startup(bot, provider, settings)
+
+    dp.startup.register(startup_handler)
     asyncio.run(dp.start_polling(bot))
 
 
