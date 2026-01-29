@@ -27,6 +27,7 @@ class Settings:
     allow_all_post_signal: bool
     monitor_interval_sec: int
     klines_limit: int
+    market_provider: str
 
 
 def load_settings() -> Settings:
@@ -44,6 +45,7 @@ def load_settings() -> Settings:
     allow_all_post_signal = _get_bool(os.getenv("ALLOW_ALL_POST_SIGNAL"), False)
     monitor_interval_sec = _get_int(os.getenv("MONITOR_INTERVAL_SEC"), 15)
     klines_limit = _get_int(os.getenv("KLINES_LIMIT"), 200)
+    market_provider = os.getenv("MARKET_PROVIDER", "auto").strip().lower()
 
     if not bot_token:
         raise ValueError("BOT_TOKEN is required")
@@ -56,4 +58,5 @@ def load_settings() -> Settings:
         allow_all_post_signal=allow_all_post_signal,
         monitor_interval_sec=monitor_interval_sec,
         klines_limit=klines_limit,
+        market_provider=market_provider,
     )
