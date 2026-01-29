@@ -9,7 +9,15 @@ from aiogram import Bot, Dispatcher
 from app.config import load_settings
 from app.handlers import all_routers
 from app.services.levels_auto import auto_levels_loop
-from app.services.marketdata import AutoProvider, BitgetProvider, BybitProvider, DummyProvider
+from app.services.marketdata import (
+    AutoProvider,
+    BinanceProvider,
+    BitgetProvider,
+    BybitProvider,
+    DummyProvider,
+    KucoinProvider,
+    OkxProvider,
+)
 from app.services.monitor import monitor_loop
 
 
@@ -40,7 +48,15 @@ def main() -> None:
     elif settings.market_provider == "bitget":
         provider = BitgetProvider()
     elif settings.market_provider == "auto":
-        provider = AutoProvider([BybitProvider(), BitgetProvider()])
+        provider = AutoProvider(
+            [
+                BybitProvider(),
+                BitgetProvider(),
+                OkxProvider(),
+                BinanceProvider(),
+                KucoinProvider(),
+            ]
+        )
     else:
         provider = DummyProvider()
     dp["provider"] = provider
